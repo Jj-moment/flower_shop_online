@@ -1,0 +1,87 @@
+package ${package.Controller};
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.web.bind.annotation.*;
+
+import ${package.Service}.${table.serviceName};
+import ${package.Parent}.utils.Result;
+import ${package.Entity}.${entity};
+import java.util.List;
+import javax.annotation.Resource;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.Api;
+import lombok.extern.slf4j.Slf4j;
+
+/**
+ * <p>
+ * ${table.comment} 前端控制器
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Slf4j
+@RestController
+@RequestMapping("/${table.entityPath}")
+@Api(value = "${entity}", tags = "${table.comment}控制层")
+public class ${table.controllerName} {
+
+    @Resource
+    private ${table.serviceName} ${table.entityPath}Service;
+
+    /**
+     * 分页查询
+     * @param page 分页对象
+     * @param limit 查询页            
+     * @param ${table.entityPath} 查询条件
+     * @return 分页查询结果
+     */
+    @GetMapping("/queryByPage")
+    @ApiOperation(value = "分页查询", notes = "分页查询")
+    public Result<List<${table.entityName}>> get${table.entityName}ByPage(@ApiParam("${table.comment}对象") ${table.entityName} ${table.entityPath},
+                                        @RequestParam @ApiParam(value="当前页", required=true) int page,
+                                        @RequestParam @ApiParam(value="查询页", required=true) int limit) {
+        Page<${table.entityName}> ${table.entityPath}Page = new Page<>(page, limit);
+        QueryWrapper<${table.entityName}> wrapper = new QueryWrapper<>();
+        return Result.success(${table.entityPath}Service.page(${table.entityPath}Page, wrapper).getRecords());
+    }
+
+    /**
+     * 新增${table.comment}
+     * @param ${table.entityPath} ${table.comment}
+     * @return 新增结果
+     */
+    @PostMapping("/insert")
+    @ApiOperation(value = "新增${table.comment}", notes = "新增${table.comment}")
+    public Result<String> save(@RequestBody @ApiParam("新增对象") ${table.entityName} ${table.entityPath}) {
+        ${table.entityPath}Service.save(${table.entityPath});
+        return Result.success("添加成功！");
+    }
+
+    /**
+     * 修改${table.comment}
+     * @param ${table.entityPath} ${table.comment}
+     * @return 修改结果
+     */
+    @PostMapping("/updateById")
+    @ApiOperation(value = "修改${table.comment}", notes = "通过id修改${table.comment}")
+    public Result<String> updateById(@RequestBody @ApiParam("修改对象") ${table.entityName} ${table.entityPath}) {
+        ${table.entityPath}Service.updateById(${table.entityPath});
+        return Result.success("更新成功！");
+    }
+
+    /**
+     * 通过id删除${table.comment}
+     * @param id 删除条件
+     * @return 删除结果
+     */
+    @PostMapping("/deleteById")
+    @ApiOperation(value = "删除${table.comment}", notes = "通过id删除${table.comment}")
+    public Result<String> removeById(@RequestParam @ApiParam(value = "id", required = true)Integer id) {
+        ${table.entityPath}Service.removeById(id);
+        return Result.success("删除成功！");
+    }
+}
+
